@@ -1,0 +1,21 @@
+{
+  "text": "南京大学",
+  "font_family": "微软雅黑",
+  "font_size": 63,
+  "font_bold": true,
+  "font_italic": false,
+  "text_color": "#ff80c0",
+  "text_opacity": 100,
+  "shadow": true,
+  "stroke": true,
+  "image_path": "E:/研究生课程/AI4SE/Photo-Watermark-2-522025720030/test_photo/watermark/水印1.png",
+  "image_opacity": 97,
+  "image_scale": 200,
+  "position_preset": "bottom_right",
+  "rotation": 0,
+  "output_format": "PNG",
+  "jpeg_quality": 89,
+  "naming_rule": "suffix",
+  "custom_prefix": "wm_",
+  "custom_suffix": "_test2"
+}
