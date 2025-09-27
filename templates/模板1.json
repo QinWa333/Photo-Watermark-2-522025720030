@@ -15,7 +15,6 @@
   "rotation": 0,
   "output_format": "PNG",
   "jpeg_quality": 89,
-  "output_folder": "E:/研究生课程/AI4SE/Photo-Watermark-2-522025720030/test_photo/photo",
   "naming_rule": "suffix",
   "custom_prefix": "wm_",
   "custom_suffix": "_test2"
