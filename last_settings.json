@@ -1,0 +1,22 @@
+{
+  "text": "水印文本",
+  "font_family": "Tahoma",
+  "font_size": 36,
+  "font_bold": false,
+  "font_italic": false,
+  "text_color": "#FFFFFF",
+  "text_opacity": 80,
+  "shadow": true,
+  "stroke": true,
+  "image_path": "",
+  "image_opacity": 80,
+  "image_scale": 100,
+  "position_preset": "bottom_right",
+  "rotation": 0,
+  "output_format": "PNG",
+  "jpeg_quality": 95,
+  "output_folder": "",
+  "naming_rule": "suffix",
+  "custom_prefix": "wm_",
+  "custom_suffix": "_watermarked"
+}
