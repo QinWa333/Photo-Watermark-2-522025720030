@@ -32,6 +32,101 @@ class WatermarkApp:
         # 创建界面
         self.create_widgets()
         self.load_last_settings()
+        self.update_export_status()
+        
+    def show_help(self):
+        """显示使用帮助"""
+        help_window = tk.Toplevel(self.root)
+        help_window.title("使用帮助")
+        help_window.geometry("600x500")
+        help_window.resizable(True, True)
+        help_window.transient(self.root)
+        
+        # 居中显示
+        help_window.geometry("+%d+%d" % (
+            self.root.winfo_rootx() + 100,
+            self.root.winfo_rooty() + 50
+        ))
+        
+        # 创建滚动文本框
+        text_frame = ttk.Frame(help_window)
+        text_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        
+        scrollbar = ttk.Scrollbar(text_frame)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        
+        text_widget = tk.Text(text_frame, wrap=tk.WORD, yscrollcommand=scrollbar.set,
+                             font=('Arial', 10), padx=10, pady=10)
+        text_widget.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        
+        scrollbar.config(command=text_widget.yview)
+        
+        # 帮助内容
+        help_text = """水印处理工具使用指南
+
+操作步骤：
+
+1. 导入图片
+   - 点击"选择图片"选择单张或多张图片
+   - 点击"选择文件夹"导入整个文件夹
+   - 支持格式：JPEG, PNG, BMP, TIFF
+
+2. 设置水印
+   [文本水印]
+   - 输入水印文字（支持中文）
+   - 选择字体（推荐"微软雅黑"）
+   - 调整大小、颜色、透明度
+   - 可添加阴影或描边效果
+   
+   [图片水印]
+   - 选择水印图片（建议PNG格式）
+   - 调整缩放比例和透明度
+
+3. 调整位置
+   - 使用九宫格快速定位
+   - 或直接在预览区拖拽水印
+   - 可调整旋转角度
+
+4. 配置导出
+   - 选择输出格式（PNG/JPEG）
+   - 选择输出文件夹（不能与原文件夹相同）
+   - 设置文件命名规则
+
+5. 开始处理
+   - 点击"开始批量导出"按钮
+   - 等待处理完成
+
+使用技巧：
+   - 实时预览：所有更改立即显示
+   - 模板功能：保存常用设置
+   - 拖拽定位：精确调整水印位置
+
+注意事项：
+   - 必须选择不同的输出文件夹
+   - 中文显示方框请更换字体
+   - PNG格式保持最佳质量
+
+如有问题，请检查Python版本和Pillow库安装"""
+        
+        text_widget.insert(tk.END, help_text)
+        text_widget.config(state=tk.DISABLED)  # 只读
+        
+        # 关闭按钮
+        ttk.Button(help_window, text="关闭", 
+                  command=help_window.destroy).pack(pady=10)
+        
+    def update_export_status(self):
+        """更新导出状态提示"""
+        if hasattr(self, 'status_label'):
+            if not self.images:
+                self.status_label.config(text="请先导入图片", foreground='orange')
+                self.export_button.config(state='disabled')
+            elif not self.output_folder_var.get():
+                self.status_label.config(text="请选择输出文件夹", foreground='orange')
+                self.export_button.config(state='disabled')
+            else:
+                self.status_label.config(text=f"准备导出 {len(self.images)} 张图片", foreground='green')
+                self.export_button.config(state='normal')
         
     def get_default_settings(self):
         """获取默认水印设置"""
@@ -89,8 +184,13 @@ class WatermarkApp:
                   command=self.select_images).pack(fill=tk.X, pady=2)
         ttk.Button(import_frame, text="选择文件夹", 
                   command=self.select_folder).pack(fill=tk.X, pady=2)
-        ttk.Button(import_frame, text="清空列表", 
-                  command=self.clear_images).pack(fill=tk.X, pady=2)
+        
+        button_row = ttk.Frame(import_frame)
+        button_row.pack(fill=tk.X, pady=2)
+        ttk.Button(button_row, text="清空列表", 
+                  command=self.clear_images).pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 2))
+        ttk.Button(button_row, text="帮助", width=6,
+                  command=self.show_help).pack(side=tk.RIGHT)
         
         # 图片列表
         list_frame = ttk.LabelFrame(parent, text="图片列表", padding=10)
@@ -174,8 +274,17 @@ class WatermarkApp:
         ttk.Entry(suffix_frame, textvariable=self.suffix_var).pack(side=tk.LEFT, fill=tk.X, expand=True)
         
         # 导出按钮
-        ttk.Button(export_frame, text="批量导出", 
-                  command=self.export_images).pack(fill=tk.X, pady=(10, 0))
+        export_btn_frame = ttk.Frame(export_frame)
+        export_btn_frame.pack(fill=tk.X, pady=(15, 0))
+        
+        self.export_button = ttk.Button(export_btn_frame, text="开始批量导出", 
+                                       command=self.export_images)
+        self.export_button.pack(fill=tk.X, pady=5)
+        
+        # 状态提示
+        self.status_label = ttk.Label(export_btn_frame, text="请先导入图片并设置水印", 
+                                     foreground='gray', font=('Arial', 8))
+        self.status_label.pack(pady=2)
     
     def create_right_panel(self, parent):
         """创建右侧面板"""
@@ -483,6 +592,9 @@ class WatermarkApp:
             self.image_listbox.selection_set(0)
             self.current_image_index = 0
             self.update_preview()
+        
+        # 更新导出状态
+        self.update_export_status()
     
     def clear_images(self):
         """清空图片列表"""
@@ -490,6 +602,7 @@ class WatermarkApp:
         self.image_listbox.delete(0, tk.END)
         self.preview_canvas.delete("all")
         self.current_image_index = 0
+        self.update_export_status()
     
     def on_image_select(self, event):
         """图片列表选择事件"""
@@ -503,6 +616,7 @@ class WatermarkApp:
         folder = filedialog.askdirectory(title="选择输出文件夹")
         if folder:
             self.output_folder_var.set(folder)
+            self.update_export_status()
     
     def select_watermark_image(self):
         """选择水印图片"""

@@ -1,10 +1,10 @@
 {
-  "text": "水印文本",
-  "font_family": "Tahoma",
-  "font_size": 36,
-  "font_bold": false,
-  "font_italic": false,
-  "text_color": "#FFFFFF",
+  "text": "水印测试",
+  "font_family": "仿宋",
+  "font_size": 63,
+  "font_bold": true,
+  "font_italic": true,
+  "text_color": "#eb0214",
   "text_opacity": 80,
   "shadow": true,
   "stroke": true,
@@ -14,9 +14,9 @@
   "position_preset": "bottom_right",
   "rotation": 0,
   "output_format": "PNG",
-  "jpeg_quality": 95,
-  "output_folder": "",
+  "jpeg_quality": 89,
+  "output_folder": "E:/研究生课程/AI4SE/Photo-Watermark-2-522025720030/out_path",
   "naming_rule": "suffix",
   "custom_prefix": "wm_",
-  "custom_suffix": "_watermarked"
+  "custom_suffix": "_test1"
 }
