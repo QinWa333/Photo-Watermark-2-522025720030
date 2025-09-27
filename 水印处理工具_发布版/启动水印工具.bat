@@ -1,0 +1,6 @@
+@echo off 
+title 水印处理工具 
+chcp 65001 > nul 
+echo 正在启动水印处理工具... 
+echo 请稍候... 
+start "" "水印处理工具.exe" 
